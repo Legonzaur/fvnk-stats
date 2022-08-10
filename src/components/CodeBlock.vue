@@ -1,6 +1,6 @@
 <template>
   <div ref="code"></div>
-  <button @click="$emit('submit')">Run</button>
+  <button @click="submit">Execute SQL</button>
 </template>
 
 <script lang="ts">
@@ -51,6 +51,11 @@ export default class CodeBlock extends Vue {
         })],
       parent: this.$refs.code as Element
     })
+  }
+
+  submit () {
+    this.$emit('submit')
+    this.$router.push({ query: {} })
   }
 }
 </script>

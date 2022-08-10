@@ -21,7 +21,7 @@
         {{ column }}
       </option>
     </select>
-    <button @click="submit">Submit</button>
+    <button @click="submit">Generate and Execute SQL</button>
   </div>
 </template>
 
@@ -40,9 +40,9 @@ import query from '@/store/SQL'
   emits: ['update:modelValue', 'submit'],
   watch: {
     '$route.query' ({ type, first, second }) {
-      this.firstSelection = first
-      this.$refs.type.value = type
-      this.$refs.second.value = second
+      if (type) this.$refs.type.value = type
+      if (first) this.firstSelection = first
+      if (second) this.$refs.second.value = second
     }
   }
 })
@@ -99,16 +99,21 @@ export default class Generator extends Vue {
   generate () {
     const type = this.$refs.type.value
     const first = this.firstSelection
-    const firstText = this.$refs.first.selectedOptions[0].text
     const second = this.$refs.second.value
+    if (!first || !second) return
 
+    const firstText = this.$refs.first.selectedOptions[0].text
     let query = first
     if (type) {
       query = `${type}(${query})`
     }
     this.$emit(
       'update:modelValue',
-      `SELECT ${query} as '${firstText}', ${second} FROM data GROUP BY ${second} ORDER BY \`${firstText}\` DESC LIMIT 400;`
+      `SELECT ${query} as '${firstText}', ${second} 
+  FROM data 
+  GROUP BY ${second} 
+  ORDER BY \`${firstText}\` 
+    DESC LIMIT 400;`
     )
     this.$emit('submit')
   }
