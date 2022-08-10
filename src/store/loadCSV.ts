@@ -10,10 +10,9 @@ const parser = parse({
 
 export type Tables = { [key: string]: Array<string>; }
 
-export default function loadCSV () {
+export default function loadCSV (data:string) {
   return new Promise<void>((resolve, reject) => {
-    fetch('./eu_2.0.0_c.csv').then(async response => {
-      await query(`CREATE TABLE "data" (
+    query(`CREATE TABLE "data" (
           servername TEXT,
           region TEXT,
           rebalanced TEXT,
@@ -52,17 +51,11 @@ export default function loadCSV () {
           distance INTEGER
           );`)
 
-      /* console.log((await query(`SELECT 'name', 'sql'
-          FROM 'sqlite_master'
-          WHERE type='table';`)).data) */
-
-      const text = await response.text()
-
-      parser.on('readable', () => {
-        let record
-        while ((record = parser.read()) !== null) {
-          // records.push(record)
-          queue.push(query(`INSERT INTO data VALUES (
+    parser.on('readable', () => {
+      let record
+      while ((record = parser.read()) !== null) {
+        // records.push(record)
+        queue.push(query(`INSERT INTO data VALUES (
               $servername,
               $region,
               $rebalanced,
@@ -99,17 +92,16 @@ export default function loadCSV () {
               $victim_offhand_weapon_2,
               $cause_of_death,
               $distance)`, (Object.fromEntries(Object.entries(record).map(([k, v]) => [`$${k}`, v]))) as BindParams))
-        }
-      })
-      parser.on('error', function (err) {
-        console.error(err.message)
-        reject(err.message)
-      })
-      parser.on('end', async function () {
-        resolve()
-      })
-      parser.write(text)
-      parser.end()
+      }
     })
+    parser.on('error', function (err) {
+      console.error(err.message)
+      reject(err.message)
+    })
+    parser.on('end', async function () {
+      resolve()
+    })
+    parser.write(data)
+    parser.end()
   })
 }

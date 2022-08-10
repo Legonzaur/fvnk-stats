@@ -1,10 +1,5 @@
 import { open } from './worker'
 
-export default function loadCSV () {
-  return new Promise<void>((resolve, reject) => {
-    fetch('./data.db').then(async response => {
-      open(await response.arrayBuffer())
-      resolve()
-    })
-  })
+export default async function loadCSV (data:Uint8Array) {
+  await open(data)
 }
