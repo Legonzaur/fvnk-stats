@@ -1,11 +1,19 @@
 <template>
-  <a ref="downloader" style="display: none"></a>
   <div class="home">
-    <Generator v-model="sqlQuery" @submit="process" :queryManager="true"></Generator>
+    <a ref="downloader" style="display: none"></a>
+    <FileLoader></FileLoader><button @click="save">Save</button>
+    <br>
+    <br>
+    <!-- Ugly BR, will do layout later -->
+    <Generator
+      v-model="sqlQuery"
+      @submit="process"
+      :queryManager="true"
+    ></Generator>
     <CodeBlock v-model="sqlQuery" @submit="process" />
     <QueryChart :columns="columns" :values="values" />
     <QueryTable :columns="columns" :values="values"></QueryTable>
-    <button @click="save">Save</button>
+
   </div>
 </template>
 
@@ -15,6 +23,7 @@ import CodeBlock from '@/components/CodeBlock.vue'
 import QueryTable from '@/components/QueryTable.vue'
 import QueryChart from '@/components/QueryChart.vue'
 import Generator from '@/components/Generator.vue'
+import FileLoader from '@/components/FileLoader.vue'
 import query, { save } from '@/store/SQL'
 
 Vue.registerHooks(['beforeRouteLeave'])
@@ -24,7 +33,8 @@ Vue.registerHooks(['beforeRouteLeave'])
     CodeBlock,
     QueryTable,
     QueryChart,
-    Generator
+    Generator,
+    FileLoader
   }
 })
 export default class HomeView extends Vue {
@@ -32,7 +42,7 @@ export default class HomeView extends Vue {
     downloader: HTMLAnchorElement;
   };
 
-  sqlQuery = localStorage.getItem('sqlQuery') || 'SELECT * FROM data;';
+  sqlQuery = localStorage.getItem('sqlQuery') || 'SELECT COUNT(*) as \'number of entries\', attacker_name FROM data GROUP BY attacker_name ORDER BY `number of entries` DESC LIMIT 400;';
   columns = new Array<string>();
   values = new Array<Array<string>>();
   mounted () {

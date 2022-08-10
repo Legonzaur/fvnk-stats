@@ -10,7 +10,7 @@
 
     </select>
     <select v-model="firstSelection" ref="first" name="first">
-      <option value="COUNT(*)">number of kills</option>
+      <option value="COUNT(*)">number of entries</option>
       <option v-for="column in numericColumns" :key="column" :value="column">
         {{ column }}
       </option>
