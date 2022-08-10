@@ -34,15 +34,20 @@ export default class QueryChart extends Vue {
   }
 
   draw () {
-    if (!this.values || !this.columns) return
+    if (!this.values || this.values.length < 1 || !this.columns) return
     this.chart?.destroy()
+    let values = this.values
+    if (values.length > 200) {
+      console.warn('too many values to display : trimmed to 200')
+      values = this.values.slice(0, 200)
+    }
     const data:ChartData<'bar', number[], unknown> = {
-      labels: this.values?.map(e => e[1]),
+      labels: values?.map(e => e[1]),
       datasets: [{
         label: this.columns[0],
         backgroundColor: 'rgb(255, 99, 132)',
         borderColor: 'rgb(255, 99, 132)',
-        data: this.values?.map(e => Number(e[0])),
+        data: values?.map(e => Number(e[0])),
         maxBarThickness: 20
       }]
     }
@@ -62,8 +67,7 @@ export default class QueryChart extends Vue {
     this.chart = new Chart(this.$refs.chart, config)
     const canvas = this.chart.canvas.parentNode as HTMLElement | null
     if (!canvas) return
-    canvas.style.height = (60 + (20 * this.values.length)) + 'px'
-    console.log(this.values.length)
+    canvas.style.height = (60 + (20 * values.length)) + 'px'
   }
 }
 </script>
