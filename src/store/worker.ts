@@ -12,7 +12,7 @@ type Pool = {
   resolve:(value:MessageEvent<SQLData> | PromiseLike<MessageEvent<SQLData>>) => void,
   reject:(value:MessageEvent<SQLData> | PromiseLike<MessageEvent<SQLData>>) => void,
 }[]
-const worker = new Worker('/worker.sql-wasm.js')
+const worker = new Worker('./worker.sql-wasm.js')
 worker.onerror = e => console.log('Worker error: ', e)
 const workerPool: Pool = []
 let workerId = 0
