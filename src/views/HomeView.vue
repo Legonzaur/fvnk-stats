@@ -1,7 +1,7 @@
 <template>
   <a ref="downloader" style="display: none"></a>
   <div class="home">
-    <Generator v-model="sqlQuery" @submit="process"></Generator>
+    <Generator v-model="sqlQuery" @submit="process" :queryManager="true"></Generator>
     <QueryChart :columns="columns" :values="values" />
     <CodeBlock v-model="sqlQuery" @submit="process" />
     <QueryTable :columns="columns" :values="values"></QueryTable>
