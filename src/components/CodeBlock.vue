@@ -21,6 +21,7 @@ import { indentWithTab } from '@codemirror/commands'
   },
   watch: {
     modelValue (value: string) {
+      if (value === this.view.state.doc.toString()) return
       this.view.update([this.view.state.update({ changes: { from: 0, to: this.view.state.doc.length, insert: value } })])
     }
   },
