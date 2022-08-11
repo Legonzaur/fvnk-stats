@@ -19,6 +19,15 @@ export default class FileLoader extends Vue {
     file: HTMLInputElement;
   };
 
+  created () {
+    if (process.env.NODE_ENV === 'development') {
+      fetch('/data.db').then(async (response) => {
+        await loadSQL(new Uint8Array(await response.arrayBuffer()))
+        loaded(true)
+      })
+    }
+  }
+
   load (event:Event) {
     const reader = new FileReader()
     const target = event.target as HTMLInputElement
