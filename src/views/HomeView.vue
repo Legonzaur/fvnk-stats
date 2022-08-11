@@ -66,7 +66,7 @@ export default class HomeView extends Vue {
         this.values = results.values as string[][]
       })
       .catch(({ data }) => {
-        console.log(data.error)
+        console.error(data.error)
       })
   }
 
