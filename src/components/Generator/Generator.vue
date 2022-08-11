@@ -35,18 +35,14 @@ import query from '@/store/SQL'
 
 @Options({
   props: {
-    modelValue: String,
-    queryManager: Boolean
+    modelValue: String
   },
-  emits: ['update:modelValue', 'submit'],
-  watch: {
-    '$route.query' ({ type, first, second }) {
-      if (type) this.$refs.type.value = type
-      if (first) this.firstSelection = first
-      if (second) this.$refs.second.value = second
-      this.generate()
-    }
-  }
+  emits: ['update:modelValue', 'submit']
+  // watch: {
+  //   '$route.query' ({ type, first, second }) {
+
+  //   }
+  // }
 })
 export default class Generator extends Vue {
   declare $refs: {
@@ -60,7 +56,6 @@ export default class Generator extends Vue {
   columns?: string[] = [];
   numericColumns?: string[] = [];
   modelValue?: string;
-  queryManager?:boolean;
   render () {
     return h(Generator, {
       modelValue: this.modelValue,
@@ -80,21 +75,14 @@ export default class Generator extends Vue {
     })
   }
 
-  mounted () {
-    const { type, first, second } = this.$route.query
-    this.firstSelection = first as string
-    this.$refs.type.value = type as string
-    this.$refs.second.value = second as string
-  }
-
   submit () {
-    if (this.queryManager) {
-      const query = Object.assign({}, this.$route.query)
-      query.type = this.$refs.type.value
-      query.first = this.firstSelection
-      query.second = this.$refs.second.value
-      this.$router.push({ query })
-    }
+    // if (this.queryManager) {
+    //   const query = Object.assign({}, this.$route.query)
+    //   query.type = this.$refs.type.value
+    //   query.first = this.firstSelection
+    //   query.second = this.$refs.second.value
+    //   this.$router.push({ query })
+    // }
     this.generate()
   }
 

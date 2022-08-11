@@ -8,7 +8,6 @@
     <Generator
       v-model="sqlQuery"
       @submit="process"
-      :queryManager="true"
     ></Generator>
     <CodeBlock v-model="sqlQuery" @submit="process" />
     <QueryChart :columns="columns" :values="values" />
@@ -22,7 +21,7 @@ import { Options, Vue } from 'vue-class-component'
 import CodeBlock from '@/components/CodeBlock.vue'
 import QueryTable from '@/components/QueryTable.vue'
 import QueryChart from '@/components/QueryChart.vue'
-import Generator from '@/components/Generator.vue'
+import Generator from '@/components/Generator/Generator.vue'
 import FileLoader from '@/components/FileLoader.vue'
 import query, { save } from '@/store/SQL'
 
