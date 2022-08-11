@@ -1,3 +1,4 @@
+import { generate } from '@vue/compiler-core'
 <template>
   <div class="generator">
     <select ref="type" name="type" :disabled="firstSelection == 'COUNT(*)'">
@@ -43,6 +44,7 @@ import query from '@/store/SQL'
       if (type) this.$refs.type.value = type
       if (first) this.firstSelection = first
       if (second) this.$refs.second.value = second
+      this.generate()
     }
   }
 })
