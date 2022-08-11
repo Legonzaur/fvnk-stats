@@ -1,13 +1,13 @@
 import { generate } from '@vue/compiler-core'
 <template>
   <div class="filter">
-    Filter
+    <!-- <button @click="$emit('delete', index)" >Delete Filter</button> -->
     <select ref="type" name="type" :disabled="getSelection == 'COUNT(*)' || getSelectionType == 'TEXT'" @change="generate">
-      <option value=""></option>
-      <option v-if="getSelection != 'COUNT(*)' && getSelectionType != 'TEXT'" value="AVG">average</option>
-      <option v-if="getSelection != 'COUNT(*)' && getSelectionType != 'TEXT'" value="MIN">min</option>
-      <option v-if="getSelection != 'COUNT(*)' && getSelectionType != 'TEXT'" value="MAX">max</option>
-      <option v-if="getSelection != 'COUNT(*)' && getSelectionType != 'TEXT'" value="SUM">sum of</option>
+      <option v-if="getSelection == 'COUNT(*)' || getSelectionType == 'TEXT'" selected="true" value=""></option>
+      <option value="AVG">average</option>
+      <option value="MIN">min</option>
+      <option value="MAX">max</option>
+      <option value="SUM">sum of</option>
     </select>
     <select v-model="getSelection" ref="get" name="get">
       <option value="COUNT(*)">number of entries</option>
@@ -15,7 +15,7 @@ import { generate } from '@vue/compiler-core'
         {{ column }}
       </option>
     </select>
-    <select ref="compare" name="compare" @change="generate">
+    <select ref="compare" name="compare"  @change="generate">
       <option value="==">==</option>
       <option value=">">&gt;</option>
       <option value="<">&lt;</option>
@@ -38,7 +38,7 @@ import query from '@/store/SQL'
   props: {
     index: Number
   },
-  emits: ['update:modelValue', 'submit'],
+  emits: ['update:modelValue', 'submit', 'delete'],
   watch: {
     getSelection (value: string) {
       this.getSelectionType = this.columns[value]
@@ -86,7 +86,7 @@ export default class Filter extends Vue {
     const compare = this.$refs.compare.value
     let target = this.$refs.compareTarget.value
     if (!get || !target || !compare) return
-    let query = get
+    let query = 'data.' + get
     if (type) {
       query = `${type}(${query})`
     }
